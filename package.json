@@ -1,0 +1,19 @@
+{
+  "name": "@gro/mcp",
+  "version": "1.0.0",
+  "description": "Install the Gro MCP server — AI-powered ad creation, research, and launch for Claude, Cursor, and Windsurf.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "gro-mcp": "./bin/install.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["mcp", "gro", "ads", "marketing", "ai", "claude"],
+  "homepage": "https://gro.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stardust-nxtrinity/gro-mcp"
+  }
+}
