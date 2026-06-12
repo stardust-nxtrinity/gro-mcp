@@ -4,6 +4,8 @@ name: Publish to npm
 # The installer reads the LIVE backend version at runtime, so this only needs
 # to run when the installer's own code changes.
 on:
+  # Manual trigger — republish on demand (also used to test the pipeline).
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
