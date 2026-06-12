@@ -33,7 +33,7 @@ function tryClaudeCode() {
   try {
     // Check if already installed
     const list = spawnSync('claude', ['mcp', 'list'], { encoding: 'utf8', stdio: 'pipe' });
-    if (list.stdout && list.stdout.includes(GRO_NAME)) {
+    if (list.stdout && list.stdout.split('\n').some(line => line.startsWith(GRO_NAME + ':'))) {
       skipped.push('Claude Code (already installed)');
       return true;
     }
