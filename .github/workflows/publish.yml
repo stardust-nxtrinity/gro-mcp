@@ -50,7 +50,8 @@ jobs:
 
       - name: Bump patch version
         if: steps.guard.outputs.skip == 'false'
-        run: npm version patch -m "chore: release %s [skip ci]"
+        run: |
+          npm version patch -m "chore: release %s [skip ci]"
 
       - name: Publish to npm
         if: steps.guard.outputs.skip == 'false'
