@@ -1,0 +1,63 @@
+name: Publish to npm
+
+# Auto-publish @gro/mcp on every push to main that touches the package.
+# The installer reads the LIVE backend version at runtime, so this only needs
+# to run when the installer's own code changes.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'bin/**'
+      - 'package.json'
+      - 'README.md'
+
+# Avoid overlapping publishes
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # to commit the version bump + tag back to main
+      id-token: write   # npm provenance
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Skip the run that this workflow's own version-bump commit creates.
+      - name: Skip if release commit
+        id: guard
+        run: |
+          if git log -1 --pretty=%B | grep -q '\[skip ci\]'; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure git
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump patch version
+        if: steps.guard.outputs.skip == 'false'
+        run: npm version patch -m "chore: release %s [skip ci]"
+
+      - name: Publish to npm
+        if: steps.guard.outputs.skip == 'false'
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push version bump + tag
+        if: steps.guard.outputs.skip == 'false'
+        run: git push --follow-tags origin main

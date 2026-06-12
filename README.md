@@ -40,3 +40,9 @@ Connects to `test-api.gro.app` instead of `api.gro.app`. Installs as `gro-stagin
 ---
 
 Made by [Gro](https://gro.app) · [Sign up](https://gro.app) · [Support](https://discord.gg/VDumFkU4JH)
+
+## Publishing
+
+`@gro/mcp` auto-publishes to npm on every push to `main` (see `.github/workflows/publish.yml`) — the workflow bumps the patch version, publishes with provenance, and pushes the version commit + tag back. **Requires an `NPM_TOKEN` repo secret** with publish rights to the `@gro` scope.
+
+The installer reads the live server version from `https://api.gro.app/api/v1/mcp/version` at install time, so it always reflects the deployed backend — there's no version to keep in sync here. New server tools never require republishing this package.

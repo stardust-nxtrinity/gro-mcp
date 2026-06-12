@@ -160,6 +160,16 @@ if (installed.length === 0 && skipped.length === 0) {
   process.exit(1);
 }
 
+// Show the LIVE server version so the installer always reflects the deployed MCP
+// (single source of truth = backend server.json, exposed at /api/v1/mcp/version).
+try {
+  const vres = await fetch(GRO_MCP_URL.replace('/public', '/version'));
+  if (vres.ok) {
+    const v = await vres.json();
+    if (v?.version) console.log(`  ${dim(`Gro MCP server v${v.version}`)}`);
+  }
+} catch (_) { /* non-fatal — just skip the version line */ }
+
 console.log('');
 if (isStaging) {
   console.log(`  ${bold('Staging mode:')} Connected to ${dim(STAGING_URL)}`);
