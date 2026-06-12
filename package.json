@@ -1,6 +1,6 @@
 {
   "name": "@gro/mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Install the Gro MCP server — AI-powered ad creation, research, and launch for Claude, Cursor, and Windsurf.",
   "type": "module",
   "license": "MIT",
